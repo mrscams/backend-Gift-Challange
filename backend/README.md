@@ -12,6 +12,11 @@ to have an insight about the API you can check the swagger Doc UI after starting
 by accessing this rul
 > http://localhost:8080/swagger-ui.html
 
+## Enhacement ToDo
+
+use  mapstrut
+add spring security and also secure the swagger UI
+
 ## Statements
 
 Companies can use Wedoogift services to distribute:
