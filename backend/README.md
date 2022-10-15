@@ -2,19 +2,15 @@
 You are interested in joining our team ? try to accomplish this challenge, we will be glad to see
 your code and give you feedback.
 
-## Guidelines
-* Use Java to accomplish this challenge.
-* Clone this repo (do not fork it)
-* Only do one commit per level and include the `.git` when submitting your test
-* We are not expecting any user interface for this challenge. 
+## Start The Application 
+you can start the application by running this command
 
-## Evaluation
-We will look at:
-* How you use OOP.
-* Your code quality.
-* The design patterns you use.
-* Your ability to use unit tests.
+ > $> mvn spring-boot:run 
 
+## Swagger Description
+to have an insight about the API you can check the swagger Doc UI after starting the application
+by accessing this rul
+> http://localhost:8080/swagger-ui.html
 
 ## Statements
 
@@ -22,7 +18,7 @@ Companies can use Wedoogift services to distribute:
 - Gift deposits
 - Meal deposits
 ### Gift deposits
-Gift deposits has 365 days lifespan, beyond this period it will no longer be counted in the user's balance.
+Gift deposits has 365 days lifespan, beyond this period it will no longer be counted in the user balance.
 
 example:
 John receives a Gift distribution with the amount of $100 euros from Tesla. he will therefore have $100 in gift cards in his account.
@@ -33,7 +29,7 @@ Meal deposit works like the Gift deposit excepting for the end date. In fact mea
 example:
 Jessica receives a Meal distribution from Apple with the amount of $50 on 01/01/2020, the distribution ends on 02/28/2021.
 
-* Implement one or two functions allowing companies to distribute gift and meal deposits to a user if the company balance allows it.
-* Implement a function to calculate the user's balance.
+* Implement one or two functions allowing companies to distribute gift and meal deposits to a user if the company's balance allows it.
+* Implement a function to calculate the user balance.
 
 
