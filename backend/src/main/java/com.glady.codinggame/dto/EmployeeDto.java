@@ -22,6 +22,7 @@ public class EmployeeDto {
     private String name;
 
     private List<GiftDepositDto> giftDeposits;
+    private List<MealDepositDto> mealDeposits;
 
     public EmployeeDto(String name) {
         this.name = name;

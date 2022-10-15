@@ -21,6 +21,12 @@ public class DepositDistributionController {
     DepositDistributionService depositDistributionService;
 
 
+    @ApiOperation(value = "deposit a meal cash for a given employee in a company" , produces = "application/json" )
+    @RequestMapping(value = "/meal", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<MealDepositDto> addMealDeposit(@RequestBody MealDepositDto deposit)  throws GladyException{
+        return new ResponseEntity<>(depositDistributionService.distributeMealDeposits(deposit), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "deposit a gift cash for a given employee in a company" , produces = "application/json")
     @RequestMapping(value = "/gift", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<GiftDepositDto> addGiftDeposit(@RequestBody GiftDepositDto giftDeposit) throws GladyException {

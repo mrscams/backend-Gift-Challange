@@ -1,19 +1,22 @@
 package com.glady.codinggame.service;
 
 import com.glady.codinggame.dto.CompanyDto;
+import com.glady.codinggame.dto.EmployeeDto;
 import com.glady.codinggame.dto.GiftDepositDto;
+import com.glady.codinggame.dto.MealDepositDto;
 import com.glady.codinggame.repository.CompanyRepository;
 import com.glady.codinggame.repository.EmployeeRepository;
 import com.glady.codinggame.repository.GiftDepositRepository;
+import com.glady.codinggame.repository.MealDepositRepository;
 import com.glady.codinggame.repository.entity.CompanyEntity;
 import com.glady.codinggame.repository.entity.GiftDepositEntity;
+import com.glady.codinggame.repository.entity.MealDepositEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -32,6 +35,8 @@ public class DepositDistributionServiceTest {
     @Mock
     private GiftDepositRepository giftDepositRepository;
     @Mock
+    private MealDepositRepository mealDepositRepository;
+    @Mock
     private CompanyRepository companyRepository;
 
     @Mock
@@ -39,6 +44,7 @@ public class DepositDistributionServiceTest {
 
     CompanyEntity company = new CompanyEntity(1l,"wadio company",new BigDecimal(1000),new BigDecimal(1000));
     GiftDepositDto giftDepositDto = new GiftDepositDto(1l,2l,BigDecimal.valueOf(50),null,null);
+    MealDepositDto mealDepositDto = new MealDepositDto(1l,2l,BigDecimal.valueOf(50),null,null);
     CompanyDto companyDto = CompanyDto.builder().name("wadio Company").giftCash(new BigDecimal(1000)).mealCash(new BigDecimal(1000)).build();
 
     @InjectMocks
@@ -65,11 +71,19 @@ public class DepositDistributionServiceTest {
     }
 
     @Test
-    public void createGiftDeposits() {
-    }
+    public void distributeMealDeposits() {
+        LocalDate mealExpirationDate = depositDistributionService.getMealExpirationDate(LocalDate.now());
+        MealDepositEntity mealDepositEntity = new MealDepositEntity(1l,2l,BigDecimal.valueOf(50), LocalDate.now(), mealExpirationDate);
+        mealDepositEntity.setId(100l);
 
-    @Test
-    public void getGiftExpirationDate() {
+        when(employeeRepository.existsById(2l)).thenReturn(true);
+        when(companyService.getCompanyById(1l)).thenReturn(companyDto);
+        when(employeeService.existsById(2l)).thenReturn(true);
+        when(companyRepository.findById(1l)).thenReturn(Optional.of(company));
+        when(mealDepositRepository.saveAndFlush(any(MealDepositEntity.class))).thenReturn(mealDepositEntity);
+
+        MealDepositDto  mealDepositDtoResult = depositDistributionService.distributeMealDeposits(mealDepositDto);
+        assertTrue(mealDepositDtoResult.getExpirationDate().isEqual(mealExpirationDate));
     }
 
 }

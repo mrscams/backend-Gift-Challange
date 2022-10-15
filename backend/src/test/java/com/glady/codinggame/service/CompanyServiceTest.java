@@ -69,6 +69,7 @@ public class CompanyServiceTest {
 
     }
 
+
     @Test
     public void should_throw_distributeGiftCash() {
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
@@ -76,6 +77,24 @@ public class CompanyServiceTest {
         Assertions.assertThatThrownBy(() ->  this.companyService.distributeGiftCash(1l,new BigDecimal(2000)))
                 .isExactlyInstanceOf(InsufficientCashException.class);
     }
+
+/*    @Test
+    public  void distributeMealCash() {
+        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+
+        BigDecimal newBalance = companyService.distributeMealCash(1l,new BigDecimal(50));
+
+        assertEquals(newBalance , BigDecimal.valueOf(950) );
+    }
+
+
+    @Test
+    public void should_throw_distributeMealCash() {
+        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+
+        Assertions.assertThatThrownBy(() ->  this.companyService.distributeMealCash(1l,new BigDecimal(2000)))
+                .isExactlyInstanceOf(InsufficientCashException.class);
+    }*/
 
     @Test
     public void hasEnoughGiftCash() {
@@ -85,6 +104,7 @@ public class CompanyServiceTest {
 
     }
 
+
     @Test
     public void has_Not_EnoughGiftCash() {
         when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
@@ -92,5 +112,21 @@ public class CompanyServiceTest {
         assertFalse(companyService.hasEnoughGiftCash(1l,BigDecimal.valueOf(2100)));
 
     }
+/*
+
+    @Test
+    public void hasEnoughMealCash() {
+        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+
+        assertTrue(companyService.hasEnoughMealCash(1l,BigDecimal.valueOf(100)));
+    }
+
+    @Test
+    public void has_Not_EnoughMealCash() {
+        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+
+        assertFalse(companyService.hasEnoughMealCash(1l,BigDecimal.valueOf(2100)));
+    }
+*/
 
 }

@@ -4,6 +4,7 @@ import com.glady.codinggame.dto.EmployeeDto;
 import com.glady.codinggame.exception.UserNotFoundException;
 import com.glady.codinggame.repository.EmployeeRepository;
 import com.glady.codinggame.repository.GiftDepositRepository;
+import com.glady.codinggame.repository.MealDepositRepository;
 import com.glady.codinggame.repository.entity.EmployeeEntity;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -12,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +27,8 @@ public class EmployeeServiceTest {
     private EmployeeRepository employeeRepository;
     @Mock
     private GiftDepositRepository giftDepositRepository;
+    @Mock
+    private MealDepositRepository mealDepositRepository;
 
     @InjectMocks
     private EmployeeService employeeService ;
@@ -76,5 +78,21 @@ public class EmployeeServiceTest {
 
         assertTrue(employeeService.getUserGiftBalance(1L).equals(new BigDecimal(50)));
 
+    }
+
+    @Test
+    public void Should_throw_When_Employee_not_exist_getUserMealBalance() {
+        when(employeeRepository.existsById(1L)).thenReturn(false);
+
+        Assertions.assertThatThrownBy(() ->  this.employeeService.getUserMealBalance(1L))
+                .isExactlyInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    public void getUserMealBalance() {
+        when(employeeRepository.existsById(1L)).thenReturn(true);
+        when(mealDepositRepository.getUserBalance(1L)).thenReturn(new BigDecimal(50));
+
+        assertTrue(employeeService.getUserMealBalance(1L).equals(new BigDecimal(50)));
     }
 }

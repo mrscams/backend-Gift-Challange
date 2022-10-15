@@ -25,6 +25,12 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.create(employeeDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "get the mealcash balance.")
+    @RequestMapping(value = "/{employeeId}/meal-balance", method = RequestMethod.GET)
+    public ResponseEntity<BigDecimal> getEmployeeMealCashBalance(@PathVariable Long employeeId)  throws GladyException  {
+        return new ResponseEntity<>(employeeService.getUserMealBalance(employeeId), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "get the Gift cash balance.")
     @RequestMapping(value = "/{employeeId}/gift-balance", method = RequestMethod.GET)
     public ResponseEntity<BigDecimal> getEmployeeGiftCashBalance(@PathVariable Long employeeId)  throws GladyException {

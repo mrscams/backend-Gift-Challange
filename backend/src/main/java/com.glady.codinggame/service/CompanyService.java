@@ -1,18 +1,20 @@
 package com.glady.codinggame.service;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import com.glady.codinggame.dto.CompanyDto;
-import com.glady.codinggame.exception.CompanyNotFoundException;
 import com.glady.codinggame.exception.GladyException;
+import com.glady.codinggame.exception.CompanyNotFoundException;
 import com.glady.codinggame.exception.InsufficientCashException;
 import com.glady.codinggame.repository.CompanyRepository;
 import com.glady.codinggame.repository.entity.CompanyEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+
 
     public CompanyDto create(CompanyDto companyDto) {
         CompanyEntity entity = new CompanyEntity(companyDto.getId(), companyDto.getName(), companyDto.getGiftCash(), companyDto.getMealCash());
@@ -59,11 +62,35 @@ public class CompanyService {
         return newCash;
     }
 
+    public  BigDecimal distributeMealCash(Long companyId, BigDecimal amount) throws GladyException {
+        CompanyEntity company = this.companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyNotFoundException());
+
+        if (!this.hasEnoughMealCash(companyId, amount)) {
+            throw new InsufficientCashException();
+        }
+
+        BigDecimal newCash = company.getGiftCash().subtract(amount);
+        company.setMealCash(newCash);
+        this.companyRepository.saveAndFlush(company);
+
+        log.info("withdraw Meal Cash > New Balance"+ newCash);
+
+        return newCash;
+    }
+
     public boolean hasEnoughGiftCash( Long companyId,  BigDecimal amount) {
         CompanyDto companyDto = this.getCompanyById(companyId);
 
         return 0 <= companyDto.getGiftCash().compareTo(amount);
     }
+
+    public boolean hasEnoughMealCash(Long companyId, BigDecimal amount) {
+        CompanyDto companyDto = this.getCompanyById(companyId);
+
+        return 0 <= companyDto.getMealCash().compareTo(amount);
+    }
+
 
     private static CompanyDto toCompany(CompanyEntity entity) {
         return CompanyDto.builder()

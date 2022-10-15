@@ -34,6 +34,13 @@ public class EmployeeEntity  {
     private List<GiftDepositEntity> giftBalanceList ;
 
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name="employeeId")
+    private List<MealDepositEntity> mealBalanceList ;
+
     public EmployeeEntity(Long id, String name) {
         this.id = id;
         this.name = name;
@@ -51,7 +58,8 @@ public class EmployeeEntity  {
 
         return  Objects.equals(this.id, entity.id)
                 && Objects.equals(this.name, entity.name)
-                && Objects.equals(this.giftBalanceList, entity.giftBalanceList);
+                && Objects.equals(this.giftBalanceList, entity.giftBalanceList)
+                && Objects.equals(this.mealBalanceList, entity.mealBalanceList);
     }
 
 }
